@@ -30,15 +30,15 @@ python -m venv venv
 ### 2. Set up a virtual environment (optional but recommended):
 ```bash
 python -m venv venv
-Activate the virtual environment:
 ```
-On Windows:
+####Activate the virtual environment:
+**On Windows:**
 
 ```bash
 
 venv\Scripts\activate
 ```
-On macOS/Linux:
+**On macOS/Linux:**
 
 ```bash
 
