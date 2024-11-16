@@ -23,7 +23,7 @@ Make sure you have Python 3.x installed. You can download Python from [python.or
 ### 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/pseudoword-generator.git
+git clone https://github.com/torressantiago/pseudoword-generator.git
 cd pseudoword-generator
 python -m venv venv
 ```
