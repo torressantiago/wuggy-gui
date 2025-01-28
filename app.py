@@ -3,6 +3,7 @@ import csv
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox, QTextEdit, QMessageBox, QFileDialog
 from PyQt5.QtCore import Qt
 from wuggy import WuggyGenerator
+from spanenglish.orthographic_spanish import LanguagePlugin
 
 class WuggyApp(QWidget):
     def __init__(self):
@@ -13,7 +14,7 @@ class WuggyApp(QWidget):
 
         self.language_label = QLabel("Select Language:")
         self.language_combobox = QComboBox()
-        self.language_combobox.addItems(["English", "Spanish"])
+        self.language_combobox.addItems(["English", "Spanish", "Spanenglish"])
         self.language_combobox.setCurrentIndex(0)
 
         self.sequence_label = QLabel("Input Sequences (comma-separated):")
@@ -63,7 +64,8 @@ class WuggyApp(QWidget):
     def generate_pseudowords(self):
         # Retrieve user inputs
         language = self.language_combobox.currentText().lower()
-        language = "orthographic_"+language
+        if language != "spanenglish":
+            language = "orthographic_"+language
         input_sequences = self.sequence_entry.text().replace(" ", "")
         input_sequences = input_sequences.split(",")
 
@@ -76,8 +78,11 @@ class WuggyApp(QWidget):
         # Create the appropriate generator object
         try:
             generator = WuggyGenerator()  # Use the correct constructor
-            generator.download_language_plugin(language, auto_download=True)
-            generator.load(language)
+            if language != "spanenglish":
+                generator.download_language_plugin(language, auto_download=True)
+                generator.load(language)
+            else:
+                generator.load(language, LanguagePlugin())
             pseudoword_matches = generator.generate_classic(input_sequences, ncandidates_per_sequence=ncandidates)
 
             # Display the pseudowords in the text box
