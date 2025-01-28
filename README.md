@@ -64,8 +64,8 @@ python app.py
 ## Authors and Credits
 This project uses the Wuggy pseudoword generator, created by Michael Piotrowski.
 
-- **Wuggy**: [https://www.mpi.nl/people/michael-piotrowski](https://www.mpi.nl/people/michael-piotrowski)
+- **Wuggy**: [https://github.com/WuggyCode/wuggy](https://github.com/WuggyCode/wuggy)
 
-Wuggy is a powerful tool used in psycholinguistic research, developed by Michael Piotrowski at the Max Planck Institute for Psycholinguistics. It generates pseudowords that closely resemble real words in a given language and have specific properties, such as segment structure, phonotactics, and syllable types.
+Wuggy is a powerful tool used in psycholinguistic research, first published by [Keuleers et al](https://link.springer.com/article/10.3758/BRM.42.3.627). It generates pseudowords that closely resemble real words in a given language and have specific properties, such as segment structure, phonotactics, and syllable types.
 
 For further details on Wuggy, please refer to the original Wuggy documentation.
