@@ -4,6 +4,17 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLa
 from PyQt5.QtCore import Qt
 from wuggy import WuggyGenerator
 from spanenglish.orthographic_spanish import LanguagePlugin
+import os
+
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for PyInstaller."""
+    if hasattr(sys, '_MEIPASS'):
+        # PyInstaller extracts files to a temporary folder
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+# Example usage
+orthographic_spanish_path = resource_path("spanenglish/orthographic_spanish.txt")
 
 class WuggyApp(QWidget):
     def __init__(self):
