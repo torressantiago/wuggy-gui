@@ -34,6 +34,9 @@ class WuggyApp(QWidget):
         self.candidates_label = QLabel("Number of Candidates per Sequence:")
         self.candidates_entry = QLineEdit()
 
+        self.import_button = QPushButton("Import from CSV")
+        self.import_button.clicked.connect(self.import_from_csv)
+
         self.generate_button = QPushButton("Generate Pseudowords")
         self.generate_button.clicked.connect(self.generate_pseudowords)
 
@@ -57,6 +60,7 @@ class WuggyApp(QWidget):
         input_layout.addWidget(self.candidates_entry)
 
         button_layout = QHBoxLayout()
+        button_layout.addWidget(self.import_button)
         button_layout.addWidget(self.generate_button)
         button_layout.addWidget(self.help_button)
         button_layout.addWidget(self.export_button)
@@ -72,13 +76,28 @@ class WuggyApp(QWidget):
 
         self.setLayout(main_layout)
 
+    def import_from_csv(self):
+        options = QFileDialog.Options()
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open CSV", "", "CSV Files (*.csv)", options=options)
+
+        if file_path:
+            try:
+                with open(file_path, newline='', encoding='utf-8') as csvfile:
+                    reader = csv.reader(csvfile)
+                    sequences = []
+                    for row in reader:
+                        sequences.extend(row)  # Assume sequences are in a single column or row
+                    self.sequence_entry.setText(", ".join(sequences))
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to read CSV: {e}")
+
     def generate_pseudowords(self):
         # Retrieve user inputs
         language = self.language_combobox.currentText().lower()
         if language != "spanenglish":
-            language = "orthographic_"+language
+            language = "orthographic_" + language
         input_sequences = self.sequence_entry.text().replace(" ", "")
-        input_sequences = input_sequences.split(",")
+        input_sequences = [seq.lower() for seq in input_sequences.split(",")]  # Convert to lowercase
 
         try:
             ncandidates = int(self.candidates_entry.text())
@@ -103,6 +122,7 @@ class WuggyApp(QWidget):
                 self.output_text.append(pseudoword)
         except Exception as e:
             QMessageBox.critical(self, "Error", str(e))
+
 
     def show_help(self):
         help_message = """
