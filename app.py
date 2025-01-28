@@ -4,9 +4,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLa
 from PyQt5.QtCore import Qt
 from wuggy import WuggyGenerator
 
-# Assuming your WuggyGenerator and methods are available here
-# from your_wuggy_module import WuggyGenerator
-
 class WuggyApp(QWidget):
     def __init__(self):
         super().__init__()
