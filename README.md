@@ -62,7 +62,7 @@ python app.py
 5. Optionally, export the results to a CSV file using the "Export to CSV" button.
 
 ## Authors and Credits
-This project uses the Wuggy pseudoword generator, created by Michael Piotrowski.
+This project uses the Wuggy pseudoword generator.
 
 - **Wuggy**: [https://github.com/WuggyCode/wuggy](https://github.com/WuggyCode/wuggy)
 
