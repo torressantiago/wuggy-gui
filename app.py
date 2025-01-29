@@ -151,7 +151,7 @@ class WuggyApp(QWidget):
 
         if file_path:
             try:
-                with open(file_path, 'w', newline='') as csvfile:
+                with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:  # Specify UTF-8 encoding
                     writer = csv.writer(csvfile)
                     writer.writerow(["Pseudoword"])  # CSV header
                     for match in pseudoword_matches:
