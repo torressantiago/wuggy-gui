@@ -8,9 +8,15 @@ from wuggy import WuggyGenerator
 from spanenglish.orthographic_spanish import LanguagePlugin
 from mod_spanish.orthographic_spanish import LanguagePlugin
 
-def resource_path(relative_path):
-    """Get the absolute path to a resource, works for PyInstaller."""
-    return os.path.join(sys._MEIPASS, relative_path) if hasattr(sys, '_MEIPASS') else os.path.abspath(relative_path)
+def get_resource_path(relative_path):
+    """Get the absolute path to a resource, works for both development and PyInstaller mode."""
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+# Example usage
+spanish_file = get_resource_path("spanenglish/orthographic_spanish.txt")
+mod_file = get_resource_path("mod_spanish/orthographic_spanish.txt")
 
 class WuggyApp(QWidget):
     def __init__(self):
@@ -71,7 +77,7 @@ class WuggyApp(QWidget):
             language = "orthographic_english"
         elif language == "spanish":
             language = "mod_spanish"
-        
+
         try:
             sequences = [seq.strip().lower() for seq in self.sequence_entry.text().split(",") if seq.strip()]
             ncandidates = int(self.candidates_entry.text())
@@ -80,21 +86,26 @@ class WuggyApp(QWidget):
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Enter valid sequences and a positive integer for candidates.")
             return
-        
+
         self.output_text.clear()
-        pool = mp.Pool(processes=mp.cpu_count())
-        results = pool.starmap(self.generate_single_sequence, [(language, seq, ncandidates) for seq in sequences])
-        pool.close()
-        pool.join()
-        
-        for res in results:
-            self.output_text.append("\n".join(res))
+
+        if __name__ == '__main__':  # Protect multiprocessing on Windows
+            with mp.Pool(processes=mp.cpu_count()) as pool:
+                results = pool.starmap(self.generate_single_sequence, [(language, seq, ncandidates) for seq in sequences])
+
+            for res in results:
+                self.output_text.append("\n".join(res))
     
     @staticmethod
     def generate_single_sequence(language, sequence, ncandidates):
         try:
             generator = WuggyGenerator()
-            generator.load(language, LanguagePlugin() if (language == "spanenglish") or (language == "mod_spanish") else None)
+            if (language == "spanenglish") or (language == "mod_spanish"):
+                print(f"Loading {language}...")
+                generator.load(language, LanguagePlugin())
+            else:
+                generator.download_language_plugin(language, auto_download=True)
+                generator.load(language)
             return [match["pseudoword"] for match in generator.generate_classic([sequence], ncandidates_per_sequence=ncandidates)]
         except Exception:
             return [f"Error generating for: {sequence}"]
@@ -122,6 +133,7 @@ class WuggyApp(QWidget):
         """)
 
 if __name__ == '__main__':
+    mp.freeze_support()  # Required for Windows
     app = QApplication(sys.argv)
     window = WuggyApp()
     window.show()
