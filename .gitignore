@@ -2,4 +2,5 @@ wuggy/
 test
 testinput.csv
 spanenglish/__pycache__/*
+mod_spanish/__pycache__/*
 testoutput.csv
